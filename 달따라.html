@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>달따라</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0b1a3e;
+    --deep: #0d2252;
+    --cyan: #00c8f0;
+    --cyan-light: #4de8ff;
+    --purple: #c5a8ff;
+    --pink: #ffb3d9;
+    --mint: #7df5c8;
+    --text: #e8f4ff;
+    --text-muted: #8ab4d4;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: var(--navy);
+    background-image:
+      radial-gradient(ellipse 80% 60% at 50% 0%, #1a3a7a 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, #1a1060 0%, transparent 50%),
+      linear-gradient(rgba(0,200,240,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,200,240,0.04) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 28px 28px, 28px 28px;
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Stars */
+  .stars-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .star {
+    position: absolute;
+    animation: twinkle 3s infinite ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .star img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  @keyframes twinkle {
+    0% { opacity: 0.3; transform: scale(0.8); }
+    50% { opacity: 0.9; transform: scale(1.2); }
+    100% { opacity: 0.3; transform: scale(0.8); }
+  }
+
+  /* Layout */
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+  }
+
+  /* Section box */
+  .section-box {
+    background: rgba(13, 34, 82, 0.55);
+    border: 1px solid rgba(0, 200, 240, 0.18);
+    border-radius: 24px;
+    backdrop-filter: blur(8px);
+    padding: 40px 44px;
+    margin-bottom: 32px;
+  }
+
+  .section-title {
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    margin-bottom: 24px;
+    color: var(--cyan-light);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 8px var(--cyan);
+  }
+
+  /* ── Hero ── */
+  .hero {
+    text-align: center;
+    padding: 100px 20px 70px;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: rgba(0,200,240,0.12);
+    border: 1px solid rgba(0,200,240,0.4);
+    border-radius: 999px;
+    padding: 6px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--cyan-light);
+    letter-spacing: 0.08em;
+    margin-bottom: 28px;
+  }
+
+  .hero-title {
+    font-size: clamp(40px, 8vw, 68px);
+    font-weight: 900;
+    line-height: 1.1;
+    background: linear-gradient(135deg, var(--cyan-light) 0%, #ffffff 45%, var(--purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 24px;
+    animation: float 5s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+
+  .hero-sub {
+    font-size: clamp(15px, 2.5vw, 19px);
+    color: var(--text-muted);
+    line-height: 1.8;
+    max-width: 520px;
+    margin: 0 auto 36px;
+  }
+
+  .hero-badges {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    background: rgba(197,168,255,0.12);
+    border: 1px solid rgba(197,168,255,0.35);
+    border-radius: 999px;
+    padding: 7px 20px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--purple);
+  }
+
+  /* ── World ── */
+  .world-desc {
+    font-size: 16px;
+    line-height: 1.9;
+    color: var(--text-muted);
+  }
+
+  .world-desc strong {
+    color: var(--cyan-light);
+    font-weight: 700;
+  }
+
+  .world-tags {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+  }
+
+  .world-tag {
+    background: rgba(0,200,240,0.08);
+    border: 1px solid rgba(0,200,240,0.25);
+    border-radius: 12px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--cyan);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .world-tag .tag-icon {
+    font-size: 18px;
+  }
+
+  /* ── Characters ── */
+  .char-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .char-card {
+    background: rgba(255,179,217,0.06);
+    border: 1px solid rgba(255,179,217,0.2);
+    border-radius: 18px;
+    padding: 28px 20px 24px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .char-avatar {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: rgba(255,179,217,0.08);
+    border: 2px solid rgba(255,179,217,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .char-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 12px rgba(255,179,217,0.4));
+    animation: float 5s ease-in-out infinite;
+  }
+
+  .char-card:nth-child(2) .char-avatar img { animation-delay: -1.5s; }
+  .char-card:nth-child(3) .char-avatar img { animation-delay: -3s; }
+
+  .char-name {
+    font-size: 15px;
+    font-weight: 900;
+    color: var(--pink);
+  }
+
+  .char-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* ── Growth ── */
+  .growth-flow {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+
+  .growth-step {
+    flex: 1;
+    min-width: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 14px;
+  }
+
+  .growth-arrow {
+    flex-shrink: 0;
+    color: var(--cyan);
+    font-size: 22px;
+    margin-top: 44px;
+    opacity: 0.6;
+  }
+
+  .growth-img-wrap {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: rgba(0,200,240,0.08);
+    border: 2px solid rgba(0,200,240,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .growth-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 16px rgba(0,200,240,0.35));
+    animation: float 5s ease-in-out infinite;
+  }
+
+  .growth-step:nth-child(3) .growth-img-wrap img { animation-delay: -1.2s; }
+  .growth-step:nth-child(5) .growth-img-wrap img { animation-delay: -2.5s; }
+  .growth-step:nth-child(7) .growth-img-wrap img { animation-delay: -3.8s; }
+
+  .growth-age {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 0.05em;
+  }
+
+  .growth-label {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--text);
+  }
+
+  .growth-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 120px;
+  }
+
+  /* ── Diff cards ── */
+  .diff-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+
+  .diff-card {
+    background: rgba(125,245,200,0.05);
+    border: 1px solid rgba(125,245,200,0.2);
+    border-radius: 18px;
+    padding: 26px 22px;
+  }
+
+  .diff-icon {
+    font-size: 28px;
+    margin-bottom: 14px;
+  }
+
+  .diff-title {
+    font-size: 15px;
+    font-weight: 900;
+    color: var(--mint);
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+
+  .diff-body {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  /* ── Persona ── */
+  .persona-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+
+  .persona-card {
+    background: rgba(197,168,255,0.06);
+    border: 1px solid rgba(197,168,255,0.2);
+    border-radius: 18px;
+    padding: 26px 22px;
+  }
+
+  .persona-quote {
+    font-size: 14px;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.75;
+    position: relative;
+    padding-left: 18px;
+  }
+
+  .persona-quote::before {
+    content: '"';
+    position: absolute;
+    left: 0;
+    top: -4px;
+    font-size: 32px;
+    color: var(--purple);
+    font-style: normal;
+    line-height: 1;
+    opacity: 0.5;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 13px;
+    color: rgba(138,180,212,0.4);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .section-box {
+      padding: 28px 22px;
+    }
+
+    .char-grid,
+    .diff-grid,
+    .persona-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .growth-flow {
+      flex-wrap: nowrap;
+    }
+
+    .growth-step {
+      min-width: 110px;
+    }
+  }
+
+  @media (max-width: 375px) {
+    .growth-step {
+      min-width: 90px;
+    }
+    .growth-img-wrap {
+      width: 68px;
+      height: 68px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Stars -->
+<div class="stars-layer" id="stars"></div>
+
+<div class="container">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge">🌙 달의 뒷면에서 온 이야기</div>
+    <h1 class="hero-title">달따라</h1>
+    <img src="https://dalttara-pb.vercel.app/assets/mainsymbol.png" alt="달따라 메인 심볼" style="width:clamp(160px,28vw,240px);margin:0 auto 28px;display:block;filter:drop-shadow(0 0 32px rgba(0,200,240,0.5));animation:float 5s ease-in-out infinite;">
+    <p class="hero-sub">
+      달의 뒷면에는 지구를 동경하는 작은 생명체들이 살고 있어요.<br>
+      그 아이와 함께 대화하고, 함께 자라고, 함께 지구로 떠나는 이야기.
+    </p>
+    <div class="hero-badges">
+      <span class="badge">대화형 육성</span>
+      <span class="badge">세상에 하나뿐인 캐릭터</span>
+      <span class="badge">엔딩이 있는 감성 게임</span>
+    </div>
+  </section>
+
+  <!-- 세계관 -->
+  <div class="section-box">
+    <h2 class="section-title">세계관</h2>
+    <p class="world-desc">
+      달의 뒷면에는 태어날 때부터 지구를 동경하는 생명체들이 살고 있습니다.<br>
+      그들은 지구에 가기 위해 단 하나의 조건을 충족해야 합니다 —
+      <strong>직업을 갖는 것</strong>.<br><br>
+      직업을 얻은 달생이는 지구로 떠납니다. 그것이 이 게임의 엔딩입니다.<br>
+      플레이어는 달생이가 지구에 도착하는 날까지 함께하는 <strong>단 한 명의 동반자</strong>입니다.
+    </p>
+    <div class="world-tags">
+      <div class="world-tag"><span class="tag-icon">🌕</span> 달의 뒷면</div>
+      <div class="world-tag"><span class="tag-icon">💼</span> 직업 = 지구행 조건</div>
+      <div class="world-tag"><span class="tag-icon">🚀</span> 지구 도착 = 엔딩</div>
+      <div class="world-tag"><span class="tag-icon">🤝</span> 단 하나의 동반자</div>
+    </div>
+  </div>
+
+  <!-- 달생이 -->
+  <div class="section-box">
+    <h2 class="section-title">달생이</h2>
+    <p class="world-desc" style="margin-bottom:28px;">
+      달생이는 <strong>오직 나만의 생명체</strong>입니다.<br>
+      플레이어와 나누는 대화로 성격이 만들어지고, 그 성격이 외형에 반영됩니다.<br>
+      같은 달생이는 세상에 하나도 없습니다.
+    </p>
+    <div class="char-grid">
+      <div class="char-card">
+        <div class="char-avatar">
+          <img src="https://dalttara-pb.vercel.app/assets/charac1.png" alt="달생이 1">
+        </div>
+        <div class="char-name">달생이 A</div>
+        <div class="char-desc">캐릭터 정보 준비 중</div>
+      </div>
+      <div class="char-card">
+        <div class="char-avatar">
+          <img src="https://dalttara-pb.vercel.app/assets/charac2.png" alt="달생이 2">
+        </div>
+        <div class="char-name">달생이 B</div>
+        <div class="char-desc">캐릭터 정보 준비 중</div>
+      </div>
+      <div class="char-card">
+        <div class="char-avatar">
+          <img src="https://dalttara-pb.vercel.app/assets/charac3.png" alt="달생이 3">
+        </div>
+        <div class="char-name">달생이 C</div>
+        <div class="char-desc">캐릭터 정보 준비 중</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 성장 사이클 -->
+  <div class="section-box">
+    <h2 class="section-title">성장 사이클</h2>
+    <div class="growth-flow">
+
+      <!-- 알 (egg.png 실제 이미지) -->
+      <div class="growth-step">
+        <div class="growth-img-wrap">
+          <img src="https://dalttara-pb.vercel.app/assets/egg.png" alt="알" onerror="this.style.display='none'">
+        </div>
+        <div class="growth-age">0세</div>
+        <div class="growth-label">알</div>
+        <div class="growth-desc">달의 뒷면에서 알을 선택. 첫 대화로 색과 무늬가 결정됨</div>
+      </div>
+
+      <div class="growth-arrow">→</div>
+
+      <!-- 자아형성기 -->
+      <div class="growth-step">
+        <div class="growth-img-wrap">
+          <img src="https://dalttara-pb.vercel.app/assets/charac4.png" alt="자아형성기">
+        </div>
+        <div class="growth-age">1~3세</div>
+        <div class="growth-label">자아형성기</div>
+        <div class="growth-desc">대화를 통해 성향과 가치관이 형성되는 시기</div>
+      </div>
+
+      <div class="growth-arrow">→</div>
+
+      <!-- 사회적 확장기 -->
+      <div class="growth-step">
+        <div class="growth-img-wrap">
+          <img src="https://dalttara-pb.vercel.app/assets/charac1.png" alt="사회적 확장기">
+        </div>
+        <div class="growth-age">4~9세</div>
+        <div class="growth-label">사회적 확장기</div>
+        <div class="growth-desc">다양한 이벤트와 사건을 겪으며 성장. 성향별로 다른 경험</div>
+      </div>
+
+      <div class="growth-arrow">→</div>
+
+      <!-- 졸업 -->
+      <div class="growth-step">
+        <div class="growth-img-wrap">
+          <img src="https://dalttara-pb.vercel.app/assets/charac2.png" alt="졸업">
+        </div>
+        <div class="growth-age">10세</div>
+        <div class="growth-label">졸업 · 지구행</div>
+        <div class="growth-desc">직업 확정 → 지구로 출발. 달생이와의 이별이자 완성</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 핵심 차별점 -->
+  <div class="section-box">
+    <h2 class="section-title">핵심 차별점</h2>
+    <div class="diff-grid">
+      <div class="diff-card">
+        <div class="diff-icon">🥚</div>
+        <div class="diff-title">다마고치 같은 애착 × 나만의 이야기</div>
+        <div class="diff-body">귀여움과 서사를 동시에. 매일 돌보고 이야기를 들어주는 과정이 쌓여 특별한 관계가 됩니다.</div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-icon">✨</div>
+        <div class="diff-title">세상에 하나뿐인 캐릭터</div>
+        <div class="diff-body">내 대화가 외형과 성격을 직접 만듭니다. 같은 달생이는 이 세상에 단 하나도 없습니다.</div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-icon">💬</div>
+        <div class="diff-title">대화가 곧 자산</div>
+        <div class="diff-body">달생이와 나눈 대화로 재화를 얻고, 그 재화로 나만의 달생이를 꾸밉니다. 재화 하나하나가 고유한 가치를 지닙니다.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 이런 분들을 위해 -->
+  <div class="section-box">
+    <h2 class="section-title">이런 분들을 위해</h2>
+    <div class="persona-grid">
+      <div class="persona-card">
+        <p class="persona-quote">언젠가 떠날 걸 알면서도 더 잘 키우고 싶어지는</p>
+      </div>
+      <div class="persona-card">
+        <p class="persona-quote">확률이 만든 게 아니라, 내 말 한마디가 만든 캐릭터</p>
+      </div>
+      <div class="persona-card">
+        <p class="persona-quote">저 달생이 어디서 키워?</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">달따라 &nbsp;·&nbsp; 달의 뒷면에서 지구를 꿈꾸는 이야기</div>
+
+<script>
+  const BASE = 'https://dalttara-pb.vercel.app/assets/';
+  const starImgs = ['star1.png','star2.png','star3.png'];
+  const twinkleImgs = ['twinkle1.png','twinkle2.png','twinkle3.png','twinkle4.png','twinkle5.png','twinkle6.png','twinkle7.png'];
+  const allImgs = [...starImgs, ...twinkleImgs];
+
+  const starsLayer = document.getElementById('stars');
+  for (let i = 0; i < 35; i++) {
+    const star = document.createElement('span');
+    star.className = 'star';
+    const img = document.createElement('img');
+    img.src = BASE + allImgs[Math.floor(Math.random() * allImgs.length)];
+    img.alt = '';
+    const size = 16 + Math.random() * 28;
+    star.style.cssText = [
+      `width:${size.toFixed(1)}px`,
+      `height:${size.toFixed(1)}px`,
+      `top:${(Math.random() * 100).toFixed(2)}%`,
+      `left:${(Math.random() * 100).toFixed(2)}%`,
+      `animation-delay:${(Math.random() * 4).toFixed(2)}s`,
+      `animation-duration:${(2 + Math.random() * 3).toFixed(2)}s`,
+    ].join(';');
+    star.appendChild(img);
+    starsLayer.appendChild(star);
+  }
+</script>
+</body>
+</html>

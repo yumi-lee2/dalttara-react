@@ -2,6 +2,7 @@ export default function Cover() {
   return (
     <section className="cover" id="cover">
       <span className="cover-badge">AI 육성 시뮬레이션</span>
+      <img src="/assets/mainsymbol.png" alt="달따라 심볼" className="cover-symbol" />
       <h1>달따라</h1>
       <h2>달생이 육성소</h2>
       <p className="cover-sub">
@@ -10,7 +11,7 @@ export default function Cover() {
         선택이 나의 최종 직업을 결정한다.
       </p>
       <div className="cover-tags">
-        <span className="tag">추리 로그라이크</span>
+        <span className="tag">AI 육성 시뮬레이션</span>
         <span className="tag">Web + LLM</span>
         <span className="tag">Web 3.0</span>
       </div>

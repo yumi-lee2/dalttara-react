@@ -59,6 +59,11 @@ body {
   50%       { transform: translateY(-14px); }
 }
 
+@keyframes sway {
+  0%, 100% { transform: rotate(-6deg); }
+  50%       { transform: rotate(6deg); }
+}
+
 /* NAV */
 .nav {
   position: fixed;
@@ -107,6 +112,16 @@ body {
 .cover {
   text-align: center;
   padding: 40px 0 60px;
+}
+
+.cover-symbol {
+  display: block;
+  width: 360px;
+  height: auto;
+  margin: 0 auto 20px;
+  animation: float 3s ease-in-out infinite;
+  transform-origin: center top;
+  filter: drop-shadow(0 0 20px rgba(0,200,240,0.4));
 }
 
 .cover-badge {
